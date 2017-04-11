@@ -65,7 +65,7 @@ public class TpLink8970Reader extends Reader {
 		// Informazioni sulla portante ADSL...
 		writeToTelnet(configuration.getString("tplink.8970.command.info.adsl", Defaults.COMMAND_INFO_ADSL));
 		readFromTelnet("{", true); // Avanzamento del reader fino all'inizio dei dati di interesse.
-		final LinkedHashMap<String, String> info = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> info = new LinkedHashMap<>();
 		BufferedReader reader = new BufferedReader(new StringReader(readFromTelnet("}", false).trim()));
 		String line;
 		while ((line = reader.readLine()) != null) {

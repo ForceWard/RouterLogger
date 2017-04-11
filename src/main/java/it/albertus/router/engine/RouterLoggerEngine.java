@@ -149,11 +149,7 @@ public abstract class RouterLoggerEngine {
 			readerClassName = StringUtils.trimToEmpty(configuredClassName);
 			Class.forName(readerClassName, false, RouterLoggerEngine.class.getClassLoader());
 		}
-		catch (final Exception e) {
-			logger.log(Level.FINER, e.toString(), e);
-			readerClassName = IReader.class.getPackage().getName() + '.' + configuredClassName;
-		}
-		catch (final LinkageError e) {
+		catch (final Exception | LinkageError e) {
 			logger.log(Level.FINER, e.toString(), e);
 			readerClassName = IReader.class.getPackage().getName() + '.' + configuredClassName;
 		}
@@ -166,11 +162,7 @@ public abstract class RouterLoggerEngine {
 			writerClassName = StringUtils.trimToEmpty(configuredClassName);
 			Class.forName(writerClassName, false, RouterLoggerEngine.class.getClassLoader());
 		}
-		catch (final Exception e) {
-			logger.log(Level.FINER, e.toString(), e);
-			writerClassName = IWriter.class.getPackage().getName() + '.' + configuredClassName;
-		}
-		catch (final LinkageError e) {
+		catch (final Exception | LinkageError e) {
 			logger.log(Level.FINER, e.toString(), e);
 			writerClassName = IWriter.class.getPackage().getName() + '.' + configuredClassName;
 		}
@@ -412,11 +404,7 @@ public abstract class RouterLoggerEngine {
 						break; // Exit immediately!
 					}
 				}
-				catch (final IOException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-					break; // Exit immediately!
-				}
-				catch (final RuntimeException e) {
+				catch (final IOException | RuntimeException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 					break; // Exit immediately!
 				}

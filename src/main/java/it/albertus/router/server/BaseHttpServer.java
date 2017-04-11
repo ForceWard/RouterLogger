@@ -29,7 +29,6 @@ import it.albertus.router.RouterLogger;
 import it.albertus.router.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.DaemonThreadFactory;
-import it.albertus.util.IOUtils;
 import it.albertus.util.logging.LoggerFactory;
 
 public abstract class BaseHttpServer {
@@ -134,15 +133,8 @@ public abstract class BaseHttpServer {
 						final char[] storepass = configuration.getCharArray("server.ssl.storepass");
 						final KeyStore keyStore = KeyStore.getInstance(configuration.getString("server.ssl.keystore.type", Defaults.SSL_KEYSTORE_TYPE));
 						// keytool -genkey -alias "myalias" -keyalg "RSA" -keypass "mykeypass" -keystore "mykeystore.jks" -storepass "mystorepass" -validity 360
-						FileInputStream fis = null;
-						BufferedInputStream bis = null;
-						try {
-							fis = new FileInputStream(configuration.getString("server.ssl.keystore.file", true));
-							bis = new BufferedInputStream(fis);
+						try (final FileInputStream fis = new FileInputStream(configuration.getString("server.ssl.keystore.file", true)); final BufferedInputStream bis = new BufferedInputStream(fis)) {
 							keyStore.load(bis, storepass);
-						}
-						finally {
-							IOUtils.closeQuietly(bis, fis);
 						}
 
 						final char[] keypass = configuration.getCharArray("server.ssl.keypass");

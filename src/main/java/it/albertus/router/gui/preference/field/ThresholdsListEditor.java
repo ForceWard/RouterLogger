@@ -52,7 +52,7 @@ public class ThresholdsListEditor extends EnhancedListEditor {
 	protected void doLoad() {
 		final List list = getList();
 		if (list != null) {
-			final Set<String> thresholds = new TreeSet<String>();
+			final Set<String> thresholds = new TreeSet<>();
 			for (final String preferenceName : getPreferenceStore().preferenceNames()) {
 				if (preferenceName.startsWith(Thresholds.CFG_PREFIX + '.')) {
 					thresholds.add(preferenceName.substring(preferenceName.indexOf('.') + 1) + DELIMITER + getPreferenceStore().getString(preferenceName));

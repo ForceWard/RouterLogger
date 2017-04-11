@@ -73,10 +73,7 @@ public class RouterLoggerPreferences extends Preferences {
 					Class.forName(configuredWriterClassName, false, this.getClass().getClassLoader());
 					setRestartRequired(true); // Restart dialog will be shown.
 				}
-				catch (final Exception e) {
-					logger.log(Level.FINE, e.toString(), e);
-				}
-				catch (final LinkageError e) {
+				catch (final Exception | LinkageError e) {
 					logger.log(Level.FINE, e.toString(), e);
 				}
 			}

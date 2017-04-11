@@ -33,18 +33,10 @@ public abstract class StaticResourceHandler extends BaseHtmlHandler {
 
 	@Override
 	protected void doGet(final HttpExchange exchange) throws IOException {
-		InputStream inputStream = null;
-		ByteArrayOutputStream outputStream = null;
-
-		try {
-			inputStream = getClass().getResourceAsStream(resourceName);
-			outputStream = new ByteArrayOutputStream();
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try (final InputStream inputStream = getClass().getResourceAsStream(resourceName)) {
 			IOUtils.copy(inputStream, outputStream, BUFFER_SIZE);
 		}
-		finally {
-			IOUtils.closeQuietly(outputStream, inputStream);
-		}
-
 		sendResponse(exchange, outputStream.toByteArray());
 	}
 

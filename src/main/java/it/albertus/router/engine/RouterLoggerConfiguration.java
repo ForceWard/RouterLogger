@@ -24,7 +24,6 @@ import it.albertus.router.util.logging.EmailHandler;
 import it.albertus.router.util.logging.EmailHandlerFilter;
 import it.albertus.router.util.logging.LogFileManager;
 import it.albertus.util.Configuration;
-import it.albertus.util.IOUtils;
 import it.albertus.util.StringUtils;
 import it.albertus.util.logging.CustomFormatter;
 import it.albertus.util.logging.HousekeepingFilter;
@@ -63,8 +62,8 @@ public class RouterLoggerConfiguration extends Configuration {
 	private static final String MSG_KEY_ERR_CONFIGURATION_REVIEW = "err.configuration.review";
 
 	private Thresholds thresholds;
-	private final Set<String> guiImportantKeys = new LinkedHashSet<String>();
-	private final Set<String> consoleKeysToShow = new LinkedHashSet<String>();
+	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
+	private final Set<String> consoleKeysToShow = new LinkedHashSet<>();
 
 	private TimeBasedRollingFileHandlerBuilder fileHandlerBuilder;
 
@@ -231,13 +230,8 @@ public class RouterLoggerConfiguration extends Configuration {
 	}
 
 	public void save(final Properties properties) throws IOException {
-		FileWriter writer = null;
-		try {
-			writer = new FileWriter(getFileName());
+		try (final FileWriter writer = new FileWriter(getFileName())) {
 			properties.store(writer, null);
-		}
-		finally {
-			IOUtils.closeQuietly(writer);
 		}
 	}
 
@@ -245,7 +239,7 @@ public class RouterLoggerConfiguration extends Configuration {
 
 		public static final String CFG_PREFIX = "threshold";
 
-		protected final Collection<Threshold> thresholdsCollection = new TreeSet<Threshold>();
+		protected final Collection<Threshold> thresholdsCollection = new TreeSet<>();
 
 		private Thresholds() {
 			try {
@@ -281,7 +275,7 @@ public class RouterLoggerConfiguration extends Configuration {
 
 		public Map<Threshold, String> getReached(final RouterData data) {
 			final Map<String, String> info = data.getData();
-			final Map<Threshold, String> reached = new TreeMap<Threshold, String>();
+			final Map<Threshold, String> reached = new TreeMap<>();
 
 			// Gestione delle soglie...
 			if (!thresholdsCollection.isEmpty() && info != null && !info.isEmpty()) {
@@ -312,7 +306,7 @@ public class RouterLoggerConfiguration extends Configuration {
 		@Override
 		protected void load() {
 			final RouterLoggerConfiguration configuration = RouterLoggerConfiguration.this;
-			final Set<String> thresholdsAdded = new HashSet<String>();
+			final Set<String> thresholdsAdded = new HashSet<>();
 			for (Object objectKey : configuration.getProperties().keySet()) {
 				String key = (String) objectKey;
 				if (key != null && key.startsWith(CFG_PREFIX + '.')) {

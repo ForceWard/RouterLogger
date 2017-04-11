@@ -63,7 +63,7 @@ public class AsusDslN14UReader extends Reader {
 
 	@Override
 	public LinkedHashMap<String, String> readInfo() throws IOException {
-		final LinkedHashMap<String, String> info = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> info = new LinkedHashMap<>();
 
 		// Informazioni sulla portante ADSL...
 		final String commandInfoAdsl = configuration.getString("asus.dsln14u.command.info.adsl", Defaults.COMMAND_INFO_ADSL);

@@ -25,7 +25,7 @@ public class ThresholdEmailItem implements Serializable {
 	};
 
 	private final Date date;
-	private final Map<String, String> thresholds = new TreeMap<String, String>();
+	private final Map<String, String> thresholds = new TreeMap<>();
 	private final RouterData routerData;
 
 	public ThresholdEmailItem(final Map<Threshold, String> thresholdsReached, final RouterData routerData) {

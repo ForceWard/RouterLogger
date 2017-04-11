@@ -28,18 +28,12 @@ public class FaviconHandler extends StaticResourceHandler {
 	}
 
 	private static byte[] loadFavicon() {
-		InputStream inputStream = null;
-		ByteArrayOutputStream outputStream = null;
-		try {
-			inputStream = FaviconHandler.class.getResourceAsStream(RESOURCE_NAME);
-			outputStream = new ByteArrayOutputStream();
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try (final InputStream inputStream = FaviconHandler.class.getResourceAsStream(RESOURCE_NAME)) {
 			IOUtils.copy(inputStream, outputStream, BUFFER_SIZE);
 		}
 		catch (final IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		finally {
-			IOUtils.closeQuietly(outputStream, inputStream);
 		}
 		return outputStream.toByteArray();
 	}

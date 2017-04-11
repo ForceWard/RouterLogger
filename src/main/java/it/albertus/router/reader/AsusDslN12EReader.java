@@ -64,8 +64,8 @@ public class AsusDslN12EReader extends Reader {
 		// Informazioni sulla portante ADSL...
 		writeToTelnet(configuration.getString("asus.dsln12e.command.info.adsl", Defaults.COMMAND_INFO_ADSL));
 		readFromTelnet("wan adsl", true); // Avanzamento del reader fino all'inizio dei dati di interesse.
-		final LinkedHashMap<String, String> info = new LinkedHashMap<String, String>();
-		BufferedReader reader = new BufferedReader(new StringReader(readFromTelnet(COMMAND_PROMPT, false).trim()));
+		final LinkedHashMap<String, String> info = new LinkedHashMap<>();
+		final BufferedReader reader = new BufferedReader(new StringReader(readFromTelnet(COMMAND_PROMPT, false).trim()));
 		String line;
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().length() > 2) {
@@ -88,8 +88,8 @@ public class AsusDslN12EReader extends Reader {
 		// Informazioni sulla connessione ad Internet...
 		writeToTelnet(configuration.getString("asus.dsln12e.command.info.wan", Defaults.COMMAND_INFO_WAN));
 		readFromTelnet("Status", true);
-		List<String> values = new ArrayList<String>(8);
-		for (String field : readFromTelnet(COMMAND_PROMPT, false).trim().split("(\\s\\s)+")) {
+		final List<String> values = new ArrayList<>(8);
+		for (final String field : readFromTelnet(COMMAND_PROMPT, false).trim().split("(\\s\\s)+")) {
 			if (field != null && field.trim().length() != 0) {
 				values.add(field.trim());
 			}

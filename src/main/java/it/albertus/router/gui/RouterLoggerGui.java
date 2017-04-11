@@ -232,7 +232,7 @@ public class RouterLoggerGui extends RouterLoggerEngine implements IShellProvide
 
 	private void printThresholdsReached(final Map<Threshold, String> thresholdsReached) {
 		if (thresholdsReached != null && !thresholdsReached.isEmpty()) {
-			final Map<String, String> message = new TreeMap<String, String>();
+			final Map<String, String> message = new TreeMap<>();
 			boolean print = false;
 			for (final Entry<Threshold, String> entry : thresholdsReached.entrySet()) {
 				final Threshold threshold = entry.getKey();

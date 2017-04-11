@@ -145,7 +145,7 @@ public class ConfigurationHandler extends BaseHtmlHandler {
 	}
 
 	private static Set<String> getSortedLines(final BufferedReader reader) throws IOException {
-		final Set<String> lines = new TreeSet<String>();
+		final Set<String> lines = new TreeSet<>();
 		String line;
 		while ((line = reader.readLine()) != null) {
 			if (!line.startsWith("#")) { // discard comments

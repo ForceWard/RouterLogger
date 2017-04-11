@@ -16,7 +16,7 @@ public class Threshold implements Comparable<Threshold> {
 		GREATER_THAN(">", new String[] { "gt", ">" });
 
 		private final String description;
-		private final Set<String> abbreviations = new HashSet<String>();
+		private final Set<String> abbreviations = new HashSet<>();
 
 		private Type(final String description, final String[] abbreviations) {
 			this.description = description;

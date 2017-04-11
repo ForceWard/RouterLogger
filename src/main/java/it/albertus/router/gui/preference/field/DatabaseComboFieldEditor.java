@@ -34,12 +34,7 @@ public class DatabaseComboFieldEditor extends ValidatedComboFieldEditor {
 					return false;
 				}
 			}
-			catch (final Exception e) {
-				logger.log(Level.FINE, e.toString(), e);
-				setErrorMessage(Messages.get("err.preferences.combo.class.database.missing"));
-				return false;
-			}
-			catch (final LinkageError e) {
+			catch (final Exception | LinkageError e) {
 				logger.log(Level.FINE, e.toString(), e);
 				setErrorMessage(Messages.get("err.preferences.combo.class.database.missing"));
 				return false;

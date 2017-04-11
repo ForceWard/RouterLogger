@@ -40,7 +40,7 @@ public class WebServer extends BaseHttpServer {
 
 	@Override
 	protected Set<BaseHttpHandler> createHandlers() {
-		final Set<BaseHttpHandler> handlers = new HashSet<BaseHttpHandler>();
+		final Set<BaseHttpHandler> handlers = new HashSet<>();
 
 		// HTML
 		handlers.add(new RootHtmlHandler());

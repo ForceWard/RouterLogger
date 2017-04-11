@@ -1,9 +1,5 @@
 package it.albertus.router.gui.preference.page;
 
-import it.albertus.jface.preference.StaticLabelsAndValues;
-import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
-import it.albertus.router.server.BaseHttpServer;
-
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Provider.Service;
@@ -15,14 +11,18 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+import it.albertus.jface.preference.StaticLabelsAndValues;
+import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
+import it.albertus.router.server.BaseHttpServer;
+
 public class ServerHttpsPreferencePage extends RestartHeaderPreferencePage {
 
 	private static final String[] KEY_STORE_FILE_EXTENSIONS = { "*.JKS;*.jks", "*.P12;*.p12;*.PFX;*.pfx", "*.*" };
 
-	private static final Set<String> keyManagerFactoryAlgorithms = new TreeSet<String>();
-	private static final Set<String> trustManagerFactoryAlgorithms = new TreeSet<String>();
-	private static final Set<String> keyStoreAlgorithms = new TreeSet<String>();
-	private static final Set<String> sslContextAlgorithms = new TreeSet<String>();
+	private static final Set<String> keyManagerFactoryAlgorithms = new TreeSet<>();
+	private static final Set<String> trustManagerFactoryAlgorithms = new TreeSet<>();
+	private static final Set<String> keyStoreAlgorithms = new TreeSet<>();
+	private static final Set<String> sslContextAlgorithms = new TreeSet<>();
 
 	static {
 		keyStoreAlgorithms.add(BaseHttpServer.Defaults.SSL_KEYSTORE_TYPE);

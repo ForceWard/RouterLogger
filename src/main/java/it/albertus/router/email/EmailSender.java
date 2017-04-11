@@ -74,7 +74,7 @@ public class EmailSender {
 		}
 	}
 
-	private final Queue<RouterLoggerEmail> queue = new ConcurrentLinkedQueue<RouterLoggerEmail>();
+	private final Queue<RouterLoggerEmail> queue = new ConcurrentLinkedQueue<>();
 	private volatile Thread daemon;
 
 	private final Object lock = new Object();
@@ -97,7 +97,7 @@ public class EmailSender {
 			logger.log(Level.FINE, Messages.get("msg.thread.started"), getName());
 			while (!isInterrupted()) {
 				final int maxSendingsPerCycle = configuration.getInt("email.max.sendings.per.cycle", Defaults.MAX_SENDINGS_PER_CYCLE);
-				final List<RouterLoggerEmail> sent = new ArrayList<RouterLoggerEmail>(Math.min(queue.size(), maxSendingsPerCycle));
+				final List<RouterLoggerEmail> sent = new ArrayList<>(Math.min(queue.size(), maxSendingsPerCycle));
 				for (final RouterLoggerEmail email : queue) {
 					if (maxSendingsPerCycle <= 0 || sent.size() < maxSendingsPerCycle) {
 						processQueuedMessage(sent, email);

@@ -66,7 +66,7 @@ public class DLinkDsl2750Reader extends Reader {
 
 		writeToTelnet(configuration.getString("dlink.2750.command.info.adsl.snr", Defaults.COMMAND_INFO_ADSL_SNR));
 		readFromTelnet("Upstream", true); // Avanzamento del reader fino all'inizio dei dati di interesse.
-		String[] snrs = readFromTelnet(COMMAND_PROMPT, false).trim().split("(\\s\\s)+");
+		final String[] snrs = readFromTelnet(COMMAND_PROMPT, false).trim().split("(\\s\\s)+");
 		info.put("ADSL SNR Downstream", snrs[0]);
 		info.put("ADSL SNR Upstream", snrs[1]);
 

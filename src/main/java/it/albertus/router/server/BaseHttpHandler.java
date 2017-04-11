@@ -45,7 +45,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
 	private static final Map<Integer, String> httpStatusCodes;
 
 	static {
-		httpStatusCodes = new HashMap<Integer, String>();
+		httpStatusCodes = new HashMap<>();
 		httpStatusCodes.put(100, "Continue");
 		httpStatusCodes.put(101, "Switching Protocols");
 		httpStatusCodes.put(102, "Processing");
@@ -182,7 +182,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
 	}
 
 	protected void doOptions(final HttpExchange exchange) throws IOException, HttpException {
-		final Set<String> allowedMethods = new TreeSet<String>();
+		final Set<String> allowedMethods = new TreeSet<>();
 		allowedMethods.add(HttpMethod.TRACE.toUpperCase());
 		allowedMethods.add(HttpMethod.OPTIONS.toUpperCase());
 		for (final Method m : getAllDeclaredMethods(this.getClass())) {
@@ -310,13 +310,8 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
 	protected byte[] doCompressResponse(final byte[] uncompressed, final HttpExchange exchange) throws IOException {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream(uncompressed.length / 4);
-		GZIPOutputStream gzos = null;
-		try {
-			gzos = new GZIPOutputStream(baos);
+		try (final GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
 			gzos.write(uncompressed);
-		}
-		finally {
-			IOUtils.closeQuietly(gzos, baos);
 		}
 		addGzipHeader(exchange);
 		return baos.toByteArray();

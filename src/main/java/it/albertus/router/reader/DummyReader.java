@@ -80,7 +80,7 @@ public class DummyReader extends Reader {
 
 	@Override
 	public LinkedHashMap<String, String> readInfo() throws IOException {
-		final LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> map = new LinkedHashMap<>();
 		for (byte i = 1; i <= COLUMNS; i++) {
 			StringBuilder field = new StringBuilder();
 			for (byte j = 1; j <= CHARACTERS; j++) {

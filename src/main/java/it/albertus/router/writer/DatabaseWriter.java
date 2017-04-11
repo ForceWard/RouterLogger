@@ -99,7 +99,7 @@ public class DatabaseWriter extends Writer {
 				logger.log(Level.INFO, Messages.get("msg.logging.into.database"), tableName);
 			}
 
-			final Map<Integer, String> columns = new HashMap<Integer, String>();
+			final Map<Integer, String> columns = new HashMap<>();
 
 			final StringBuilder dml = new StringBuilder("INSERT INTO ").append(tableName).append(" (").append(getTimestampColumnName());
 			dml.append(", ").append(getResponseTimeColumnName());

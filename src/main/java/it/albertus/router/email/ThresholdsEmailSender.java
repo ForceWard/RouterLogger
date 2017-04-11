@@ -43,7 +43,7 @@ public class ThresholdsEmailSender {
 
 	private static final String CFG_KEY_THRESHOLDS_EMAIL_MAX_ITEMS = "thresholds.email.max.items";
 
-	private final Queue<ThresholdEmailItem> queue = new ConcurrentLinkedQueue<ThresholdEmailItem>();
+	private final Queue<ThresholdEmailItem> queue = new ConcurrentLinkedQueue<>();
 	private int extraEventsCount;
 	private Date lastEventTimestamp;
 	private volatile Thread daemon;
@@ -114,7 +114,7 @@ public class ThresholdsEmailSender {
 		}
 
 		private void sendMessages() {
-			final LinkedList<ThresholdEmailItem> sent = new LinkedList<ThresholdEmailItem>();
+			final LinkedList<ThresholdEmailItem> sent = new LinkedList<>();
 
 			// Build email message...
 			final StringBuilder message = new StringBuilder();
