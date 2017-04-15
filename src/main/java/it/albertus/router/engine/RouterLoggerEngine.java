@@ -14,12 +14,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.albertus.jface.JFaceMessages;
-import it.albertus.router.RouterLogger;
 import it.albertus.router.email.ThresholdsEmailSender;
 import it.albertus.router.mqtt.MqttClient;
 import it.albertus.router.reader.IReader;
 import it.albertus.router.resources.Messages;
-import it.albertus.router.server.WebServer;
+import it.albertus.router.server.HttpServer;
 import it.albertus.router.util.logging.CustomLevel;
 import it.albertus.router.writer.CsvWriter;
 import it.albertus.router.writer.IWriter;
@@ -31,8 +30,6 @@ import it.albertus.util.logging.LoggerFactory;
 public abstract class RouterLoggerEngine {
 
 	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerEngine.class);
-
-	protected static final RouterLoggerConfiguration configuration = RouterLogger.getConfiguration();
 
 	public static class Defaults {
 		public static final int ITERATIONS = 0;
@@ -61,7 +58,9 @@ public abstract class RouterLoggerEngine {
 	private static final String MSG_KEY_ERR_CONFIGURATION_INVALID = "err.configuration.invalid";
 	private static final String MSG_KEY_ERR_CONFIGURATION_REVIEW = "err.configuration.review";
 
-	protected final WebServer httpServer = WebServer.getInstance();
+	protected final RouterLoggerConfiguration configuration = RouterLoggerConfiguration.getInstance();
+
+	protected final HttpServer httpServer = HttpServer.getInstance();
 	protected final MqttClient mqttClient = MqttClient.getInstance();
 
 	private IReader reader;

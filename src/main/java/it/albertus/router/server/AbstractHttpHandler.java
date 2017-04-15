@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,14 +39,14 @@ import it.albertus.util.IOUtils;
 import it.albertus.util.NewLine;
 import it.albertus.util.logging.LoggerFactory;
 
-public abstract class BaseHttpHandler implements HttpHandler {
+public abstract class AbstractHttpHandler implements HttpHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(BaseHttpHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractHttpHandler.class);
 
 	private static final Map<Integer, String> httpStatusCodes;
 
 	static {
-		httpStatusCodes = new HashMap<>();
+		httpStatusCodes = new HashMap<Integer, String>();
 		httpStatusCodes.put(100, "Continue");
 		httpStatusCodes.put(101, "Switching Protocols");
 		httpStatusCodes.put(102, "Processing");
@@ -118,6 +119,19 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
 	private static final Charset charset = initCharset();
 
+	private static Object[] lastRequestInfo;
+
+	protected final IHttpServerConfiguration httpServerConfiguration;
+
+	public AbstractHttpHandler(final IHttpServerConfiguration httpServerConfiguration) {
+		this.httpServerConfiguration = httpServerConfiguration;
+	}
+
+	@Override
+	public void handle(final HttpExchange exchange) throws IOException {
+		service(exchange);
+	}
+
 	protected final void service(final HttpExchange exchange) throws IOException, HttpException {
 		if (HttpMethod.GET.equalsIgnoreCase(exchange.getRequestMethod())) {
 			doGet(exchange);
@@ -182,7 +196,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
 	}
 
 	protected void doOptions(final HttpExchange exchange) throws IOException, HttpException {
-		final Set<String> allowedMethods = new TreeSet<>();
+		final Set<String> allowedMethods = new TreeSet<String>();
 		allowedMethods.add(HttpMethod.TRACE.toUpperCase());
 		allowedMethods.add(HttpMethod.OPTIONS.toUpperCase());
 		for (final Method m : getAllDeclaredMethods(this.getClass())) {
@@ -230,7 +244,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
 	}
 
 	private Method[] getAllDeclaredMethods(final Class<?> c) {
-		if (c.equals(BaseHttpHandler.class)) {
+		if (c.equals(AbstractHttpHandler.class)) {
 			return new Method[] {};
 		}
 
@@ -257,7 +271,18 @@ public abstract class BaseHttpHandler implements HttpHandler {
 		}
 	}
 
-	protected abstract void addCommonHeaders(HttpExchange exchange);
+	/**
+	 * Adds {@code Content-Type} and {@code Date} headers to the provided
+	 * {@link HttpExchange} object.
+	 * 
+	 * @param exchange the {@link HttpExchange} to be modified.
+	 */
+	protected void addCommonHeaders(final HttpExchange exchange) {
+		addContentTypeHeader(exchange);
+		addDateHeader(exchange);
+	}
+
+	protected abstract void addContentTypeHeader(HttpExchange exchange);
 
 	/**
 	 * Adds {@code Date} header to the provided {@link HttpExchange} object.
@@ -310,8 +335,13 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
 	protected byte[] doCompressResponse(final byte[] uncompressed, final HttpExchange exchange) throws IOException {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream(uncompressed.length / 4);
-		try (final GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
+		GZIPOutputStream gzos = null;
+		try {
+			gzos = new GZIPOutputStream(baos);
 			gzos.write(uncompressed);
+		}
+		finally {
+			IOUtils.closeQuietly(gzos, baos);
 		}
 		addGzipHeader(exchange);
 		return baos.toByteArray();
@@ -417,6 +447,24 @@ public abstract class BaseHttpHandler implements HttpHandler {
 		sendResponse(exchange, payload, HttpURLConnection.HTTP_OK);
 	}
 
+	protected void log(final HttpExchange exchange) {
+		Level level = Level.OFF;
+		try {
+			level = Level.parse(httpServerConfiguration.getRequestLoggingLevel());
+		}
+		catch (final RuntimeException e) {
+			logger.log(Level.WARNING, e.toString(), e);
+		}
+
+		if (logger.isLoggable(level)) {
+			final Object[] requestInfo = new Object[] { exchange.getRemoteAddress(), exchange.getRequestMethod(), exchange.getRequestURI() };
+			if (!Arrays.equals(requestInfo, getLastRequestInfo())) {
+				setLastRequestInfo(requestInfo);
+				logger.log(level, Messages.get("msg.server.log.request"), new Object[] { Thread.currentThread().getName(), exchange.getRemoteAddress(), exchange.getRequestMethod(), exchange.getRequestURI() });
+			}
+		}
+	}
+
 	protected Charset getCharset() {
 		return charset;
 	}
@@ -439,6 +487,14 @@ public abstract class BaseHttpHandler implements HttpHandler {
 	public static String getPath(final Class<?> clazz) {
 		final Path annotation = clazz.getAnnotation(Path.class);
 		return annotation != null ? annotation.value() : null;
+	}
+
+	protected static Object[] getLastRequestInfo() {
+		return lastRequestInfo;
+	}
+
+	protected static void setLastRequestInfo(final Object[] requestInfo) {
+		lastRequestInfo = requestInfo;
 	}
 
 }
