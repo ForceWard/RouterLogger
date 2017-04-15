@@ -1,12 +1,12 @@
-package it.albertus.router.server.json;
+package it.albertus.router.http.json;
 
 import java.io.IOException;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import it.albertus.httpserver.annotation.Path;
 import it.albertus.router.dto.RouterDataDto;
 import it.albertus.router.engine.RouterLoggerEngine;
-import it.albertus.router.server.annotation.Path;
 import it.albertus.router.util.Payload;
 
 @Path("/json/data")

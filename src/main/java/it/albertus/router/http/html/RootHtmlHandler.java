@@ -1,13 +1,14 @@
-package it.albertus.router.server.html;
+package it.albertus.router.http.html;
 
 import java.io.IOException;
 import java.text.DateFormat;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import it.albertus.httpserver.HttpMethod;
+import it.albertus.httpserver.annotation.Path;
+import it.albertus.httpserver.html.HtmlUtils;
 import it.albertus.router.resources.Messages;
-import it.albertus.router.server.HttpMethod;
-import it.albertus.router.server.annotation.Path;
 import it.albertus.util.NewLine;
 import it.albertus.util.Version;
 

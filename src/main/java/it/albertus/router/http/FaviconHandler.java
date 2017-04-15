@@ -1,4 +1,4 @@
-package it.albertus.router.server;
+package it.albertus.router.http;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
-import it.albertus.router.server.annotation.Path;
+import it.albertus.httpserver.annotation.Path;
 import it.albertus.util.IOUtils;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -28,12 +28,18 @@ public class FaviconHandler extends StaticResourceHandler {
 	}
 
 	private static byte[] loadFavicon() {
-		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		try (final InputStream inputStream = FaviconHandler.class.getResourceAsStream(RESOURCE_NAME)) {
+		InputStream inputStream = null;
+		ByteArrayOutputStream outputStream = null;
+		try {
+			inputStream = FaviconHandler.class.getResourceAsStream(RESOURCE_NAME);
+			outputStream = new ByteArrayOutputStream();
 			IOUtils.copy(inputStream, outputStream, BUFFER_SIZE);
 		}
 		catch (final IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		finally {
+			IOUtils.closeQuietly(outputStream, inputStream);
 		}
 		return outputStream.toByteArray();
 	}
